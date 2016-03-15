@@ -17,6 +17,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.etl.dao.BaseDao;
+import cn.etl.entity.Admin;
+import cn.etl.entity.BaseDomain;
 import cn.etl.settting.Constant;
 
 public  class BaseController<T>{
@@ -57,7 +59,12 @@ public  class BaseController<T>{
 		mav.addObject("list", list);
 		return mav;
 	}
-	
+	@RequestMapping("/findOne")
+	public @ResponseBody T findOneById(T entity)
+	{
+		return baseDao.get(entity);
+	}
+
 	@RequestMapping("/add")
 	public void add(T entity,HttpServletResponse res) throws IOException
 	{
@@ -77,15 +84,19 @@ public  class BaseController<T>{
 		return mav;
 	}
 	
-	
-	@RequestMapping("/delete")
-	public ModelAndView delete(Serializable[] ids,String view)
+	@RequestMapping("/deleteById")
+	public void delete1(Integer[] id)
 	{
-		if(ids!=null)
-			for(Serializable id:ids)
-				baseDao.remove(id);
-		ModelAndView mav=new ModelAndView(view);
-		return mav;
+		if(id==null) return ;
+		for(Serializable s:id)
+			baseDao.remove(s);
+	}
+	@RequestMapping("/deleteByUsername")
+	public void delete2(String[] username)
+	{
+		if(username==null) return ;
+		for(Serializable s:username)
+			baseDao.remove(s);
 	}
 	@RequestMapping("/getPage")
 	public @ResponseBody List<T> getPage(Integer pageIndex,Integer pageSize)

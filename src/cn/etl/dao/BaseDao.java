@@ -31,8 +31,8 @@ public interface BaseDao<T> {
 	
 	public abstract PageBean<T> getPage(int pageIndex,int pageSize);
     public abstract PageBean<T> getPage(final String hql,int pageIndex,int pageSize);
-    
-	public abstract T get(Serializable id);
+    public abstract T get(Serializable id);
+	public abstract T get(T entity);
 	public boolean saveOrUpdate(T entity);
 	
 }

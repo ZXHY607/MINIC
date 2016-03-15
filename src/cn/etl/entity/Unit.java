@@ -1,31 +1,36 @@
 package cn.etl.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 
 @Entity
-@IdClass(UnitKey.class)
 public class Unit extends BaseDomain{
 	/**
-	 * 第几单元
+	 * 单元Id,等于courseID*10000+单元序号（必）
 	 */
 	@Id
-	private int uIndex;
+	private int uId;
 	/**
-	 * 所属课程
+	 * 单元介绍
 	 */
-	@Id
-	private int cId;
 	private String uIntro;
 	/**
-	 * 单元名称
+	 * 单元名称(必）
 	 */
 	private String uName;
-	/**
-	 * 发给的人
-	 */
-	private String toPerson;
+	
+	
+	public int getuId() {
+		return uId;
+	}
+
+	public void setuId(int uId) {
+		this.uId = uId;
+	}
+
 	public String getuIntro() {
 		return uIntro;
 	}
@@ -39,26 +44,17 @@ public class Unit extends BaseDomain{
 	public void setuName(String uName) {
 		this.uName = uName;
 	}
-	public int getuIndex() {
-		return uIndex;
-	}
-	public void setuIndex(int uIndex) {
-		this.uIndex = uIndex;
-	}
-	public int getcId() {
-		return cId;
-	}
-	public void setcId(int cId) {
-		this.cId = cId;
-	}
-
-	public String getToPerson() {
-		return toPerson;
-	}
-
-	public void setToPerson(String toPerson) {
-		this.toPerson = toPerson;
-	}
 	
+    public int getCourseId(){
+    	return uId/10000;
+    }
+    public int getUnitIndex(){
+    	return uId%10000;
+    }
+	@Override
+	public Serializable getKey() {
+		// TODO Auto-generated method stub
+		return uId;
+	}
 	
 }
