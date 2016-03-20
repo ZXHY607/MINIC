@@ -1,13 +1,14 @@
 body
 {
-  background-image: url("../images/login.png");
+  background-image: url("../images/2.jpg");
+  background-size: 100%;
 }
 
 .container1
 {
   position: absolute;
-  left: 38%;
-  top: 25%;
+  left: 18%;
+  top: 15%;
   text-align: center;
   vertical-align: middle;
   width: 25%;
@@ -17,10 +18,11 @@ body
 h1 {
   
   color: #ffffff;
-  font-size: 60px;
+  font-size: 50px;
   /*font-style: italic;*/
   font-weight: bolder;
-  text-shadow: 0.1em 0.1em 0.2em #000000;
+  font-family: Elephant;
+  
 }
 
 a {
@@ -31,7 +33,7 @@ a {
   padding-top: 2%;
   padding-bottom: 2%;
   padding-right: 10%;
-  padding-left: 10%;
+  padding-left: 9%;
 
 }
 
@@ -39,6 +41,12 @@ a:hover {
    border:1px solid white;
 }
 
+.foot
+{
+  color: #ffffff;
+  font-family: 幼圆;
+  font-size: 14px;
+}
 .overlay {
   pointer-events: none;
   position: absolute;
@@ -53,6 +61,7 @@ a:hover {
   position: absolute;
   height: 100%;
   width: 100%;
+
 }
 
 .wrapper {

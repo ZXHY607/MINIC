@@ -59,6 +59,18 @@ ul
    overflow:hidden;
 }
 
+.con1
+{
+   display: inline-block;
+   height: 600px;
+   width: 975px;
+   
+   margin-right: -4px;
+   margin-left: -4px;
+
+   overflow:hidden;
+}
+
 /*第一栏样式*/
 
 .book1
@@ -379,6 +391,16 @@ ul
    text-align: left;
 }
 
+.conIn1
+{
+   height: 600px;
+   width: 995px;
+   overflow-y:scroll;
+   background-image: url("../images/rbg.png");
+   background-repeat:no-repeat;
+   text-align: left;
+}
+
 .ct
 {
 	margin-top: 130px;
@@ -392,4 +414,15 @@ ul
 .file
 {
 	padding-left: 40px;
+}
+
+/* news */
+.news
+{
+    height: 555px;
+    width: 955px;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 50px;
 }

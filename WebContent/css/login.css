@@ -5,6 +5,11 @@
 	background-image: url("../images/login.png");
 	
 }
+.return
+{
+    color: #ffffff;
+    font-size: 18px;
+}
 
 .in {
 	text-align:center;
