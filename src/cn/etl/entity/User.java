@@ -1,5 +1,6 @@
 package cn.etl.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Id;
@@ -9,10 +10,23 @@ import javax.persistence.OrderBy;
 
 @MappedSuperclass  
 public class User extends BaseDomain{
+	/**
+	 * 用户名（必）
+	 */
 	@Id
 	private String username;
+	/**
+	 * 密码（必）
+	 */
 	private String password;
-	private String name,email;
+	/**
+	 * 姓名（必）
+	 */
+	private String name;
+	/**
+	 * 邮箱
+	 */
+	private String email;
 	
 	
 	public String getUsername() {
@@ -40,7 +54,11 @@ public class User extends BaseDomain{
 		this.email = email;
 	}
 	
-	
+	@Override
+	public Serializable getKey() {
+		// TODO Auto-generated method stub
+		return username;
+	}
 	
 	
 }

@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 
 
 
+
 import org.apache.shiro.session.mgt.SessionFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -23,6 +24,7 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.util.Assert;
 
 import cn.etl.dao.BaseDao;
+import cn.etl.entity.BaseDomain;
 import cn.etl.settting.Constant;
 import cn.etl.util.PageBean;
 
@@ -47,10 +49,15 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		return (T) getHibernateTemplate().load(entityClass, id);
 	}
 
-	public T get(Serializable id) {
-		return (T) this.getHibernateTemplate().get(entityClass, id);
+	public T get(T entity) {
+		BaseDomain base=(BaseDomain) entity;
+		return (T) this.getHibernateTemplate().get(entityClass,base.getKey());
 	}
-
+	@Override
+	public T get(Serializable id) {
+		// TODO Auto-generated method stub
+		return this.getHibernateTemplate().get(entityClass, id);
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
