@@ -1,7 +1,1 @@
-/applicationContext-mvc.xml
-/applicationContext.xml
 /cn/
-/ehcache.xml
-/etl.properties
-/log4j.properties
-/persistence.xml

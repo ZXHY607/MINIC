@@ -16,5 +16,6 @@ public class Constant {
 		   PAGE_SIZE.put("Unit", 8);
 
 	   }
+	   public static final String RESULT="/result.jsp",LOGIN="/login.jsp";
 	   
 }

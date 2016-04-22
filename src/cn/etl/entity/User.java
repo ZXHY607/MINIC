@@ -55,7 +55,7 @@ public class User extends BaseDomain{
 	}
 	
 	@Override
-	public Serializable getKey() {
+	public Serializable key() {
 		// TODO Auto-generated method stub
 		return username;
 	}

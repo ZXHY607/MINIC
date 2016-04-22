@@ -6,7 +6,6 @@
 package cn.etl.util;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,7 +17,7 @@ public class PageBean<T> implements Serializable {
     private int pageSize;             //每页的记录数
     private int pageIndex;
     private int mxIndex;
-	public PageBean(int totalCount,List data,int pageSize,int pageIndex){
+	public PageBean(int totalCount,List<T> data,int pageSize,int pageIndex){
 		this.totalCount = totalCount;
 		this.data = data;
 		this.pageSize=pageSize;
@@ -37,7 +36,7 @@ public class PageBean<T> implements Serializable {
 	/**
 	 * @return the data
 	 */
-	public List getData() {
+	public List<T> getData() {
 		return data;
 	}
 

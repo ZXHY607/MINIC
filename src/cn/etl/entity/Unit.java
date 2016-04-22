@@ -2,17 +2,14 @@ package cn.etl.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
 
 @Entity
 public class Unit extends BaseDomain{
-	/**
-	 * 单元Id,等于courseID*10000+单元序号（必）
-	 */
-	@Id
-	private int uId;
+	
+	@EmbeddedId
+	private UnitKey uId;
 	/**
 	 * 单元介绍
 	 */
@@ -23,11 +20,13 @@ public class Unit extends BaseDomain{
 	private String uName;
 	
 	
-	public int getuId() {
+	
+
+	public UnitKey getuId() {
 		return uId;
 	}
 
-	public void setuId(int uId) {
+	public void setuId(UnitKey uId) {
 		this.uId = uId;
 	}
 
@@ -45,14 +44,9 @@ public class Unit extends BaseDomain{
 		this.uName = uName;
 	}
 	
-    public int getCourseId(){
-    	return uId/10000;
-    }
-    public int getUnitIndex(){
-    	return uId%10000;
-    }
+    
 	@Override
-	public Serializable getKey() {
+	public Serializable key() {
 		// TODO Auto-generated method stub
 		return uId;
 	}
