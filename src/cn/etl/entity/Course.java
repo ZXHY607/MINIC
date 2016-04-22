@@ -37,9 +37,7 @@ public class Course extends BaseDomain {
 	/**
 	 * 课程包含的单元
 	 */
-	@OneToMany(targetEntity = Unit.class,
-			   cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
-	private List<Unit> units;
+
 	public int getcId() {
 		return cId;
 	}
@@ -70,14 +68,9 @@ public class Course extends BaseDomain {
 	public void setChief(String chief) {
 		this.chief = chief;
 	}
-	public List<Unit> getUnits() {
-		return units;
-	}
-	public void setUnits(List<Unit> units) {
-		this.units = units;
-	}
+	
 	@Override
-	public Serializable getKey() {
+	public Serializable key() {
 		// TODO Auto-generated method stub
 		return cId;
 	}

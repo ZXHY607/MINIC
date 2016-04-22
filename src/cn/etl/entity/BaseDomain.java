@@ -14,7 +14,7 @@ private static final long serialVersionUID = 1L;
 		return ToStringBuilder.reflectionToString(this);
 		
 	}
-	public Serializable getKey(){
+	public Serializable key(){
 		return null;
 	}
 }

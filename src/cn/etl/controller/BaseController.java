@@ -24,10 +24,11 @@ import cn.etl.settting.Constant;
 public  class BaseController<T>{
 	private Class<T> entityClass;
 	protected BaseDao<T> baseDao;
+	@SuppressWarnings("unchecked")
 	public BaseController(){
 		Type genType = getClass().getGenericSuperclass();
 		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
-		entityClass = (Class) params[0];
+		entityClass = (Class<T>) params[0];
 		WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext(); 
 		//加载对应的Dao实现类的bean @Resource的name必须是常量所以不能使用@Resource注解注入
 		baseDao=(BaseDao<T>) wac.getBean(firstLetterToLowerCase(entityClass.getSimpleName())+"DaoImpl");
@@ -85,14 +86,14 @@ public  class BaseController<T>{
 	}
 	
 	@RequestMapping("/deleteById")
-	public void delete1(Integer[] id)
+	public void deleteById(Integer[] id)
 	{
 		if(id==null) return ;
 		for(Serializable s:id)
 			baseDao.remove(s);
 	}
 	@RequestMapping("/deleteByUsername")
-	public void delete2(String[] username)
+	public void deleteByUsername(String[] username)
 	{
 		if(username==null) return ;
 		for(Serializable s:username)

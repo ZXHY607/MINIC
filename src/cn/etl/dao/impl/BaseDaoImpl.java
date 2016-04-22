@@ -51,7 +51,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 
 	public T get(T entity) {
 		BaseDomain base=(BaseDomain) entity;
-		return (T) this.getHibernateTemplate().get(entityClass,base.getKey());
+		return (T) this.getHibernateTemplate().get(entityClass,base.key());
 	}
 	@Override
 	public T get(Serializable id) {
