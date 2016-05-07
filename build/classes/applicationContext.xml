@@ -13,15 +13,9 @@
 	 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd"
 	default-lazy-init="true">
 
-	<!--  <context:annotation-config></context:annotation-config>
-	 AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor、
-
-PersistenceAnnotationBeanPostProcessor 以及 RequiredAnnotationBeanPostProcessor 这 4 个BeanPostProcessor。
-	-->
 	<context:property-placeholder location="classpath:etl.properties" />
 
-	<context:component-scan base-package="cn.etl">	
-	</context:component-scan>
+	<context:component-scan base-package="cn.etl"></context:component-scan>
 
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
@@ -65,41 +59,21 @@ PersistenceAnnotationBeanPostProcessor 以及 RequiredAnnotationBeanPostProcesso
 		<property name="acquireIncrement" value="${connection_pools.acquire_increment}" />
 		<property name="checkoutTimeout" value="${connection_pools.checkout_timeout}" />
 	</bean>
-	<!-- <bean
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<value>classpath:etl.properties</value>
-		</property>
-	</bean> -->
-
+	<!-- 配置视图解析器 -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+	</bean>
+	<!-- 配置hibernateTemplate -->
 	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
-
-	<bean id="txManager"
-		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory" />
+	
+    <!-- 配置文件上传参数 -->  
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="maxUploadSize" value="4073741824"/>  
 	</bean>
-
-    <!-- 支持上传文件 -->  
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/> 
-
-	<!-- 
-	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />  
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />  
-     
-    <aop:config>
-    	<aop:pointcut id="serviceMethod" expression="execution(*cn.etl.service..*ServiceImpl.*(..))"/>
-    	<aop:advisor pointcut-ref="serviceMethod" advice-ref="txAdvice"></aop:advisor>
-    </aop:config>
-    
-      <tx:advice id="txAdvice" transaction-manager="txManager">
-    	<tx:attributes>
-    		<tx:method name="*"/>
-    	</tx:attributes>
-    </tx:advice>
-  -->
-		<tx:annotation-driven transaction-manager="txManager" />
+	
+	<tx:annotation-driven transaction-manager="txManager" />
 		
-		<import resource="applicationContext-mvc.xml"></import>
 </beans>

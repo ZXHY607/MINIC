@@ -17,5 +17,5 @@ public class Constant {
 
 	   }
 	   public static final String RESULT="/result.jsp",LOGIN="/login.jsp";
-	   
+	   public static final String projectTitle = "英语教学平台";
 }
