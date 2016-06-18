@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="js/ReadingC&C.js" type="text/javascript"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title></title>
 </head>
@@ -74,7 +75,8 @@
 						}%>
 					</li>
 					
-				</ul></li>
+				</ul>
+		   </li>
 			<%
 				}
 			%>
@@ -85,7 +87,8 @@
 					<em></em>
 					<li><a class="navi" href="">学习平台</a> <a class="navi" href="">新闻平台</a>
 						<a class="navi" href="">测试平台</a></li>
-				</ul></li>
+				</ul>
+			</li>
 
 			<li class="navigation0"><a>辅助系统</a>
 				<ul class="navigation1">
