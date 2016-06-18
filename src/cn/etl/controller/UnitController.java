@@ -13,12 +13,10 @@ import cn.etl.entity.Unit;
 @Controller
 @RequestMapping("/unit")
 public class UnitController extends BaseController<Unit> {
-	private BaseDao baseDao;
 	@Override
 	@Resource(name="unitDaoImpl")
 	public void setBaseDao(BaseDao baseDao) {
 		// TODO Auto-generated method stub
-		this.baseDao = baseDao;
 		super.setBaseDao(baseDao);
 	}
 	@RequestMapping("/findUnitsOfCourse")

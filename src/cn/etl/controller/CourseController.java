@@ -11,12 +11,10 @@ import cn.etl.entity.Course;
 @Controller
 @RequestMapping("/course")
 public class CourseController extends BaseController<Course> {
-	private BaseDao baseDao;
 	@Override
 	@Resource(name="courseDaoImpl")
 	public void setBaseDao(BaseDao baseDao) {
 		// TODO Auto-generated method stub
-		this.baseDao = baseDao;
 		super.setBaseDao(baseDao);
 	}
 }

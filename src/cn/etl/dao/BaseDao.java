@@ -9,7 +9,7 @@ import cn.etl.util.PageBean;
 public interface BaseDao<T> {
 
 	public abstract T load(Serializable id);
-
+    public abstract T get(Serializable id);
 	public abstract List<T> loadAll();
 
 	public abstract boolean save(T entity);
@@ -27,12 +27,11 @@ public interface BaseDao<T> {
 	 * @param hql 
 	 * @return
 	 */
-	public abstract int getCount(String hql);
+	public abstract long getCount(String hql);
 	
-	public abstract PageBean<T> getPage(int pageIndex,int pageSize);
-    public abstract PageBean<T> getPage(final String hql,int pageIndex,int pageSize);
-    public abstract T get(Serializable id);
-	public abstract T get(T entity);
+	public abstract PageBean<T> getPage(Integer pageIndex,Integer pageSize);
+    public abstract PageBean<T> getPage(final String hql,Integer pageIndex,Integer pageSize);
+
 	public boolean saveOrUpdate(T entity);
 	
 }

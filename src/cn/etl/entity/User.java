@@ -60,10 +60,14 @@ public class User extends BaseDomain{
 	}
 	
 	@Override
+	public Serializable keyClass() {
+		// TODO Auto-generated method stub
+		return String.class;
+	}
+	@Override
 	public Serializable key() {
 		// TODO Auto-generated method stub
 		return username;
 	}
-	
 	
 }

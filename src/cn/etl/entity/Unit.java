@@ -8,23 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 
 @Entity
-@IdClass(UnitKey.class)
 public class Unit extends BaseDomain{
 	/**
-	 * 课程组名称
+	 * 单元id
 	 */
 	@Id
-	private String gName;
-	/**
-	 * 在课程组里面的顺序
-	 */
-	@Id
-	private int cIndex;
-	/**
-	 * 单元顺序
-	 */
-	@Id
-	private int uIndex;
+	private int id;
 	/**
 	 * 单元介绍
 	 */
@@ -34,11 +23,15 @@ public class Unit extends BaseDomain{
 	 */
 	private String uName;
 	
-
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getuIntro() {
 		return uIntro;
 	}
-	
 	public void setuIntro(String uIntro) {
 		this.uIntro = uIntro;
 	}
@@ -48,35 +41,9 @@ public class Unit extends BaseDomain{
 	public void setuName(String uName) {
 		this.uName = uName;
 	}
-	
-	public String getgName() {
-		return gName;
-	}
-
-	public void setgName(String gName) {
-		this.gName = gName;
-	}
-
-	public int getcIndex() {
-		return cIndex;
-	}
-
-	public void setcIndex(int cIndex) {
-		this.cIndex = cIndex;
-	}
-
-	public int getuIndex() {
-		return uIndex;
-	}
-
-	public void setuIndex(int uIndex) {
-		this.uIndex = uIndex;
-	}
-
 	@Override
 	public Serializable key() {
 		// TODO Auto-generated method stub
-		return new UnitKey(gName, cIndex, uIndex);
+		return id;
 	}
-	
 }

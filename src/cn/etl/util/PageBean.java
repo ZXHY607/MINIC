@@ -98,40 +98,16 @@ public class PageBean<T> implements Serializable {
 	public void setPageIndex(int pageIndex) {
 		this.pageIndex = pageIndex;
 	}
-	public String getFirstPage(String uri,String []names,String []params)
+	
+	public int getPrePage()
 	{
-		uri+="?";
-		for(int i=0;i<names.length;i++)
-			if(params[i]!=null)
-				uri+=names[i]+"="+params[i]+"&";
-		return uri;
+		return getReasonableIndex(pageIndex-1);
 	}
-	public String getPrePage(String uri,String []names,String []params)
+	public int getNextPage()
 	{
-		uri+="?";
-		for(int i=0;i<names.length;i++)
-			if(params[i]!=null)
-				uri+=names[i]+"="+params[i]+"&";
-		return uri+"pg="+getReasonableIndex(pageIndex-1);
-	}
-	public String getNextPage(String uri,String []names,String []params)
-	{
-		uri+="?";
-		for(int i=0;i<names.length;i++)
-			if(params[i]!=null)
-				uri+=names[i]+"="+params[i]+"&";
-		return uri+"pg="+getReasonableIndex(pageIndex+1);
-	}
-	public String getLastPage(String uri,String []names,String []params)
-	{
-		uri+="?";
-		for(int i=0;i<names.length;i++)
-			if(params[i]!=null)
-				uri+=names[i]+"="+params[i]+"&";
-		return uri+"pg="+mxIndex;
+		return getReasonableIndex(pageIndex+1);
 	}
 	
-
 	/**
 	 * @return the serialversionuid
 	 */

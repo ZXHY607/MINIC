@@ -19,41 +19,54 @@ import org.hibernate.annotations.Cascade;
 
 @Entity
 public class CourseGroup extends BaseDomain{
+	@Id
+	private String id;
 	/**
 	 * 课程组名称
 	 */
-	@Id
 	private String gName;
 	/**
-	 * 课程组索引
+	 * 课程组学习链接,链接之间已分号分隔
 	 */
-	@OneToMany(cascade={CascadeType.ALL},fetch=FetchType.EAGER,mappedBy="gName")
-	@OrderBy("cIndex")
-	private List<Course> courses;
-	private int gIndex;
+	private String urls;
+	/**
+	 * 学习链接的名称,名称之间用分号分隔
+	 */
+	private String urlNames;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getgName() {
 		return gName;
 	}
 	public void setgName(String gName) {
 		this.gName = gName;
 	}
-	@Column(unique=true)
-	public int getgIndex() {
-		return gIndex;
+	
+	public String getUrls() {
+		return urls;
 	}
-	public void setgIndex(int gIndex) {
-		this.gIndex = gIndex;
+	public void setUrls(String urls) {
+		this.urls = urls;
 	}
 	
-	public List<Course> getCourses() {
-		return courses;
+	public String getUrlNames() {
+		return urlNames;
 	}
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
+	public void setUrlNames(String urlNames) {
+		this.urlNames = urlNames;
+	}
+	@Override
+	public Serializable keyClass() {
+		// TODO Auto-generated method stub
+		return String.class;
 	}
 	@Override
 	public Serializable key() {
 		// TODO Auto-generated method stub
-		return gName;
+		return id;
 	}
 }

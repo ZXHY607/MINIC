@@ -13,12 +13,10 @@ import cn.etl.entity.Student;
 @Controller
 @RequestMapping("/student")
 public class StudentController extends BaseController<Student>{
-	private BaseDao baseDao;
 	@Override
 	@Resource(name="studentDaoImpl")
 	public void setBaseDao(BaseDao baseDao) {
 		// TODO Auto-generated method stub
-		this.baseDao = baseDao;
 		super.setBaseDao(baseDao);
 	}
 }

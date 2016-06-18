@@ -1,4 +1,7 @@
 
+$(function(){
+	$("#header").load("/header");
+});
 //首页导航
 
 $(function()

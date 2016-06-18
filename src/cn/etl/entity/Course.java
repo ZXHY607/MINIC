@@ -15,11 +15,17 @@ import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 @Entity
-@IdClass(CourseKey.class)
 public class Course extends BaseDomain {
-	
-	
+	@Id
+	private String id;
+	/**
+	 * 课程名称
+	 */
 	private String cName;
+	/**
+	 * 课程组名称
+	 */
+	private String gName;
 	/**
 	 * 课程介绍
 	 */
@@ -27,23 +33,17 @@ public class Course extends BaseDomain {
 	/**
 	 * 学分（必）
 	 */
-	private String cRedits;
+	private String credits;
 	/**
 	 * 负责上传课件，微课，作业的老师
 	 */
 	private String chief;
-	/**
-	 * 课程组
-	 */
-	@Id
-	private String gName;
-	/**
-	 * 课程在课程组中的顺序
-	 */
-	@Id
-	private int cIndex;
-	public String getChief() {
-		return chief;
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getcName() {
 		return cName;
@@ -57,33 +57,33 @@ public class Course extends BaseDomain {
 	public void setcIntro(String cIntro) {
 		this.cIntro = cIntro;
 	}
-	public String getcRedits() {
-		return cRedits;
+	public String getCredits() {
+		return credits;
 	}
-	public void setcRedits(String cRedits) {
-		this.cRedits = cRedits;
+	public void setCredits(String credits) {
+		this.credits = credits;
+	}
+	public String getChief() {
+		return chief;
 	}
 	public void setChief(String chief) {
 		this.chief = chief;
 	}
-	
 	public String getgName() {
 		return gName;
 	}
 	public void setgName(String gName) {
 		this.gName = gName;
 	}
-
-	public int getcIndex() {
-		return cIndex;
-	}
-	public void setcIndex(int cIndex) {
-		this.cIndex = cIndex;
+	@Override
+	public Serializable keyClass() {
+		// TODO Auto-generated method stub
+		return String.class;
 	}
 	@Override
 	public Serializable key() {
 		// TODO Auto-generated method stub
-		return new CourseKey(gName, cIndex);
+		return id;
 	}
 	
 }

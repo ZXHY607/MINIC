@@ -1,26 +1,23 @@
 ﻿package cn.etl.dao.impl;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
-
-
-
-import org.apache.shiro.session.mgt.SessionFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.dao.DataAccessException;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.HibernateTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import cn.etl.dao.BaseDao;
@@ -28,11 +25,12 @@ import cn.etl.entity.BaseDomain;
 import cn.etl.settting.Constant;
 import cn.etl.util.PageBean;
 
-public abstract class BaseDaoImpl<T> implements BaseDao<T> {
-	private Class<T> entityClass;
-	@Resource(name = "hibernateTemplate")//相当于set方法
-	private HibernateTemplate hibernateTemplate;//hibernateTemplate就是hibernate
 
+@Transactional
+public  class BaseDaoImpl<T> implements BaseDao<T> {
+	private Class<T> entityClass;
+	private Class<?> keyClass;
+	private HibernateTemplate hibernateTemplate;//hibernateTemplate就是hibernate
 	public HibernateTemplate getHibernateTemplate() {
 		return hibernateTemplate;
 	}
@@ -40,7 +38,14 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	public BaseDaoImpl() {
 		Type genType = getClass().getGenericSuperclass();
 		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
-		entityClass = (Class) params[0];
+		entityClass = (Class<T>) params[0];
+		try{
+			Method m = entityClass.getMethod("keyClass");
+			T obj = entityClass.newInstance();
+			keyClass = (Class<?>) m.invoke(obj);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -49,15 +54,16 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		return (T) getHibernateTemplate().load(entityClass, id);
 	}
 
-	public T get(T entity) {
-		BaseDomain base=(BaseDomain) entity;
-		return (T) this.getHibernateTemplate().get(entityClass,base.key());
-	}
+	
 	@Override
 	public T get(Serializable id) {
 		// TODO Auto-generated method stub
-		return this.getHibernateTemplate().get(entityClass, id);
+		Serializable key=id;
+		if(id instanceof String&&keyClass == Integer.class)
+			key = Integer.valueOf((String)id);
+		return this.getHibernateTemplate().get(entityClass, key);
 	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -81,8 +87,9 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		System.out.println("in the baseDao Impl");
 		try{
 		this.getHibernateTemplate().save(entity);
-		}catch(Exception e)
+		}catch(Throwable e)
 		{
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -97,7 +104,8 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	public boolean remove(T entity) {
 		try{
 		this.getHibernateTemplate().delete(entity);
-		}catch(DataAccessException e){
+		}catch(Exception e){
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -119,6 +127,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		this.getHibernateTemplate().update(entity);
 		}catch(Exception  e)
 		{
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -129,10 +138,11 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	 * 
 	 * @see net.gslab.dao.impl.BaseDao#find(java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> find(String hql) {
 		System.out.println("hql in the BaseDaoImpl:"+hql);
-		return this.getHibernateTemplate().find(hql);
+		return  (List<T>) this.getHibernateTemplate().find(hql);
 	}
 
 	/*
@@ -140,9 +150,10 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	 * 
 	 * @see net.gslab.dao.impl.BaseDao#find(java.lang.String, java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> find(String hql, Object... params) {
-		return this.getHibernateTemplate().find(hql, params);
+		return (List<T>) this.getHibernateTemplate().find(hql, params);
 	}
 
 	public void initialize(Object entity) {
@@ -174,6 +185,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		int beginPos = hql.toLowerCase().indexOf("from");
 		Assert.isTrue(beginPos != -1, "hql:" + hql
 				+ "must have a keyword 'from'");
+		
 		return hql.substring(beginPos);
 	}
 
@@ -191,19 +203,22 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 
-
+	@Resource(name = "hibernateTemplate")//相当于set方法
 	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+		//配置查询缓存
+		//hibernateTemplate.setCacheQueries(true);
 		this.hibernateTemplate = hibernateTemplate;
+		
 	}
 
 
 
 	@Override
-	public int getCount(String hql) {
+	public long getCount(String hql) {
 		// TODO Auto-generated method stub
 		hql="select count(*) "+hql; 
-		List list=find(hql);
-		return Integer.parseInt(list.get(0).toString());
+		List<Long> list=(List<Long>) hibernateTemplate.find(hql);
+		return list.get(0);
 	}
 
 
@@ -217,30 +232,34 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 
 
 	@Override
-	public PageBean<T> getPage(int pageIndex, final int pageSize) {
+	public PageBean<T> getPage(Integer pageIndex, Integer pageSize) {
 		// TODO Auto-generated method stub
+		if(pageIndex==null) pageIndex=1;
+		if(pageSize==null||pageSize.equals(0)) pageSize=Constant.PAGE_SIZE.get(entityClass.getSimpleName());
+		if(null == pageSize) pageSize = 15;
 		final String hql="from "+getEntityClass().getSimpleName();
 		return getPage(hql,pageIndex,pageSize);
 	}
 	@Override
-	public PageBean getPage(final String hql, int pageIndex, final int pageSize) {
+	public PageBean<T> getPage(final String hql, Integer pageIndex, final Integer pageSize)  {
 		// TODO Auto-generated method stub
-		int total=getCount(hql);
+		int total=(int) getCount(hql);
 		int mxIndex=(total-1)/pageSize+1;
 		if(pageIndex>mxIndex) pageIndex=mxIndex;
 		if(pageIndex<1) pageIndex=1;
 		final int offset=(pageIndex-1)*pageSize;
-		 List list = getHibernateTemplate().executeFind(new HibernateCallback() {     
+		 @SuppressWarnings("unchecked")
+		List<T> list = getHibernateTemplate().execute(new HibernateCallback() {     
 			    public Object doInHibernate(Session session)     
-			      throws HibernateException, SQLException {     
+			    {     
 			     Query query = session.createQuery(hql);     
 			     query.setFirstResult(offset);     
 			     query.setMaxResults(pageSize);     
-			     List list = query.list();     
+			     List<T> list = query.list();     
 			     return list;     
 			    }     
 			   });     
-		 return new PageBean(total,list,pageSize,pageIndex);
+		 return new PageBean<T>(total,list,pageSize,pageIndex);
 	}
 	public boolean saveOrUpdate(T entity){
 		try{

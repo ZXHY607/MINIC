@@ -12,12 +12,10 @@ import cn.etl.entity.News;
 @Controller
 @RequestMapping("/news")
 public class NewsController extends BaseController<News>{
-	private BaseDao baseDao;
 	@Override
 	@Resource(name="newsDaoImpl")
 	public void setBaseDao(BaseDao baseDao) {
 		// TODO Auto-generated method stub
-		this.baseDao = baseDao;
 		super.setBaseDao(baseDao);
 	}
 }
