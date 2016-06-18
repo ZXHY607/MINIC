@@ -4,12 +4,16 @@ import java.io.Serializable;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 
 @Entity
 public class Unit extends BaseDomain{
-	
-	@EmbeddedId
-	private UnitKey uId;
+	/**
+	 * 单元id
+	 */
+	@Id
+	private int id;
 	/**
 	 * 单元介绍
 	 */
@@ -19,21 +23,15 @@ public class Unit extends BaseDomain{
 	 */
 	private String uName;
 	
-	
-	
-
-	public UnitKey getuId() {
-		return uId;
+	public int getId() {
+		return id;
 	}
-
-	public void setuId(UnitKey uId) {
-		this.uId = uId;
+	public void setId(int id) {
+		this.id = id;
 	}
-
 	public String getuIntro() {
 		return uIntro;
 	}
-	
 	public void setuIntro(String uIntro) {
 		this.uIntro = uIntro;
 	}
@@ -43,12 +41,9 @@ public class Unit extends BaseDomain{
 	public void setuName(String uName) {
 		this.uName = uName;
 	}
-	
-    
 	@Override
 	public Serializable key() {
 		// TODO Auto-generated method stub
-		return uId;
+		return id;
 	}
-	
 }

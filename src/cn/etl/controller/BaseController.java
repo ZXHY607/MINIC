@@ -2,109 +2,96 @@ package cn.etl.controller;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.ModelAndView;
 
 import cn.etl.dao.BaseDao;
-import cn.etl.entity.Admin;
 import cn.etl.entity.BaseDomain;
-import cn.etl.settting.Constant;
-
+import cn.etl.util.CommonUtil;
+import cn.etl.util.PageBean;
 public  class BaseController<T>{
-	private Class<T> entityClass;
 	protected BaseDao<T> baseDao;
-	@SuppressWarnings("unchecked")
-	public BaseController(){
-		Type genType = getClass().getGenericSuperclass();
-		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
-		entityClass = (Class<T>) params[0];
-		WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext(); 
-		//加载对应的Dao实现类的bean @Resource的name必须是常量所以不能使用@Resource注解注入
-		baseDao=(BaseDao<T>) wac.getBean(firstLetterToLowerCase(entityClass.getSimpleName())+"DaoImpl");
-		
-	}
-	public Class<T> getEntityClass() {
-		return entityClass;
-	}
-	 //把类名的首字母变为小写，因为我的标识符使用小驼峰法，类命名使用大驼峰法
-	private String firstLetterToLowerCase(String s) 
+
+	public void setBaseDao(BaseDao baseDao)
 	{
-		char[] charArray=s.toCharArray();
-		if(charArray[0]<97) charArray[0]+='a'-'A';
-		return String.valueOf(charArray);
+		this.baseDao = baseDao;
 	}
 	
-	//列出所有记录 ,返回json串
-		@RequestMapping("/list")
-		public @ResponseBody List<T> list()
-		{
-			List<T> list=baseDao.loadAll();
-			return list;
-		}
-	//列出所有记录 ,返回页面
-	@RequestMapping("/listRView")
-	public ModelAndView listRView(String view){
-		List<T> list=baseDao.loadAll();
-		ModelAndView mav=new ModelAndView(view);
-		mav.addObject("list", list);
-		return mav;
-	}
-	@RequestMapping("/findOne")
-	public @ResponseBody T findOneById(T entity)
+	public String add(T entity,Model model)
 	{
-		return baseDao.get(entity);
+		String msg="添加成功";
+		BaseDomain bd = (BaseDomain) entity;
+		if(baseDao.get(bd.key())!=null)
+		{
+			msg="已经存在";
+			model.addAttribute("msg", msg);
+			model.addAttribute("ele", entity);
+			return msg;
+		}
+		if(!baseDao.save(entity))
+			msg="添加失败";
+		model.addAttribute("msg", msg);
+		model.addAttribute("ele", entity);
+		return msg;
+	}
+	
+	
+	@RequestMapping("/delete")
+	@ResponseBody public String delete(String[] id)
+	{
+		if(id==null) return "没有选中任何内容";
+		StringBuilder sb = new StringBuilder();
+		int count = 0;
+		for(Serializable s:id)
+			if(!baseDao.remove(s))
+			{
+				count++;
+				sb.append("id为"+s+"的条目 删除失败");
+			}
+		if(count==0)
+		return "删除成功";
+		else return sb.append(count+"个错误").toString();
+	}
+	
+	@RequestMapping("/{view}/{id}.fm")
+	public String modifyForm(@PathVariable String view, @PathVariable String id, Model model)
+	{
+		Serializable s = id;
+		T ele = baseDao.get(s);
+		model.addAttribute("ele", ele);
+		model.addAttribute("action", "modify");
+		return "/admin/"+view+".jsp";
+	}
+	 public String modify(T entity, Model model)
+	{
+		String msg= null;
+		if(baseDao.update(entity))
+		msg= "修改成功";
+		else msg= "修改失败";
+		model.addAttribute("msg", msg);
+		model.addAttribute("ele", entity);
+		model.addAttribute("action", "modify");
+		return msg;
+	}
+	@RequestMapping(value="/{pageIndex}/{pageSize}.htm" )
+	public String getPageRView(@PathVariable Integer pageIndex,@PathVariable Integer pageSize,Model model,
+			String view)
+	{
+		PageBean<T> pb = baseDao.getPage(pageIndex, pageSize);
+		model.addAttribute("pb", pb);
+		if(null == view) 
+		return "/"+CommonUtil.fLTLC(baseDao.getEntityClass().getSimpleName())+"List.jsp";
+		return view;
 	}
 
-	@RequestMapping("/add")
-	public void add(T entity,HttpServletResponse res) throws IOException
-	{
-		String msg="添加成功";
-		if(!baseDao.save(entity))
-			msg="添加失败";
-		res.getWriter().println(msg);
-	}
-	@RequestMapping("/addRView")
-	public ModelAndView addRView(T entity,String view)
-	{
-		String msg="添加成功";
-		if(!baseDao.save(entity))
-			msg="添加失败";
-		ModelAndView mav=new ModelAndView(view);
-		mav.addObject("msg",msg);
-		return mav;
-	}
-	
-	@RequestMapping("/deleteById")
-	public void deleteById(Integer[] id)
-	{
-		if(id==null) return ;
-		for(Serializable s:id)
-			baseDao.remove(s);
-	}
-	@RequestMapping("/deleteByUsername")
-	public void deleteByUsername(String[] username)
-	{
-		if(username==null) return ;
-		for(Serializable s:username)
-			baseDao.remove(s);
-	}
-	@RequestMapping("/getPage")
-	public @ResponseBody List<T> getPage(Integer pageIndex,Integer pageSize)
-	{
-		if(pageIndex==null) pageIndex=1;
-		if(pageSize==null) pageSize=Constant.PAGE_SIZE.get(entityClass.getSimpleName());
-		return baseDao.getPage(pageIndex, pageSize).getData();
+	@RequestMapping("{id}.htm")
+	public String findOne(@PathVariable String id, Model model,String view){
+		T ele = baseDao.get(id);
+		model.addAttribute("ele", ele);
+		return "/"+CommonUtil.fLTLC(baseDao.getEntityClass().getSimpleName())+"Detail.jsp";
 	}
 	
 	

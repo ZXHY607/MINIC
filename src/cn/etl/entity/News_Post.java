@@ -88,7 +88,7 @@ public class News_Post extends BaseDomain {
 	public void setPublishRole(int publishRole) {
 		this.publishRole = publishRole;
 	}
-
+	
 	@Override
 	public Serializable key() {
 		// TODO Auto-generated method stub
