@@ -9,7 +9,8 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="css/ReadingC&C.css">
 	<script src="js/jquery-2.1.4.js" type="text/javascript"></script>
-	<script src="js/ReadingC&C.js" type="text/javascript"></script>
+	<script src="js/header.js" type="text/javascript"></script>
+	
 </head>
 <body class="bg"><center>
   <div id="header"></div>
@@ -69,5 +70,7 @@
 	</div>
   </div>
 
-</center></body>
+</center>
+
+</body>
 </html>

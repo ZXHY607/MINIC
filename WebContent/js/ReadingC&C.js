@@ -1,14 +1,14 @@
 
-$(function(){
-	$("#header").load("/header");
-});
+
 //首页导航
 
 $(function()
 
 {
+	
 	$(".navigation0").hover(function()
        {
+		
          $(this).find(".navigation1").css("display","inline");
        },
        function()
