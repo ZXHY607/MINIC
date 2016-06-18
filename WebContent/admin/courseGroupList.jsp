@@ -12,7 +12,7 @@
 	<a class="op" onclick="del.submit()">删除选中条目</a>
 
     <br><br>
-	<form action="/courseGroup/delete" method="post" class="asyn-form" id="del">
+	<form action="/courseGroup/delete" method="post"  id="del">
 	<table>
 		<tr><th>ID</th><th>名称</th><th></th><th></th></tr>
 		<c:forEach  var="ele" items="${pb.data }">

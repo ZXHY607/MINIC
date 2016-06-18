@@ -19,22 +19,18 @@ public  class BaseController<T>{
 	{
 		this.baseDao = baseDao;
 	}
-	
-	public String add(T entity,Model model)
+	@RequestMapping("/add")
+	@ResponseBody public String add(T entity,Model model)
 	{
 		String msg="添加成功";
 		BaseDomain bd = (BaseDomain) entity;
 		if(baseDao.get(bd.key())!=null)
 		{
 			msg="已经存在";
-			model.addAttribute("msg", msg);
-			model.addAttribute("ele", entity);
 			return msg;
 		}
 		if(!baseDao.save(entity))
 			msg="添加失败";
-		model.addAttribute("msg", msg);
-		model.addAttribute("ele", entity);
 		return msg;
 	}
 	
@@ -65,15 +61,13 @@ public  class BaseController<T>{
 		model.addAttribute("action", "modify");
 		return "/admin/"+view+".jsp";
 	}
-	 public String modify(T entity, Model model)
+	@RequestMapping("/modify")
+	@ResponseBody public String modify(T entity, Model model)
 	{
 		String msg= null;
 		if(baseDao.update(entity))
 		msg= "修改成功";
 		else msg= "修改失败";
-		model.addAttribute("msg", msg);
-		model.addAttribute("ele", entity);
-		model.addAttribute("action", "modify");
 		return msg;
 	}
 	@RequestMapping(value="/{pageIndex}/{pageSize}.htm" )

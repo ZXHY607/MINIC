@@ -13,17 +13,17 @@
 <body>
 	
 	<form action ='/course/${(empty action)?"add":"modify"}' method="post"  role="form" 
-	class="form-horizontal asyn-form" >
+	class="form-horizontal ajax-form" >
 		<label>课程名称</label>
 		<input name="cName"  class="form-control" value="${ ele.cName}" required>&nbsp;&nbsp;
 		<label >所属课程组</label>
-		<select name="gId" id="${gId }" class="select" reuqired>
-			<c:forEach items="list" var="cg">
-			<option value="${cg.id }">${cg.gName }</option>
+		<select name="gId" value="${gId }" class="select"  reuqired>
+			<c:forEach items="${list }" var="cG">
+			<option value="${cG.id }">${cG.gName }</option>
 			</c:forEach>
 		</select>
 		<label >册数</label>
-		<select name="cIndex" class="select" id="${cIndex }" required>
+		<select name="cIndex" class="select" value="${cIndex }" required>
 			<option value="01">第一册</option>
 			<option value="02">第二册</option>
 			<option value="03">第三册</option>
