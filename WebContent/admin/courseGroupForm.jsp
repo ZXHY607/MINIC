@@ -11,10 +11,10 @@
 </head>
 <body>
 	
-	<form action ='/courseGroup/${(empty action)?"add":"modify"}' method="post"  role="form" 
-	class="form-horizontal asyn-form" >
+	<form action ='/courseGroup/${(empty action)?"cGAdd":"cGModify"}' method="post"  role="form" 
+	class="form-horizontal ajax-form" >
 			<label>课程组ID</label>
-			<select name="id" id="${ele.id }" class="select">
+			<select name="id" value="${ele.id }" class="select">
 				<option value="01">01</option>
 				<option value="02">02</option>
 				<option value="03">03</option>

@@ -46,4 +46,10 @@ public class RequestDispacher {
 	public String AdmDispatcher(@PathVariable String key, Model model){
 		return "/"+key+"/1/0.htm?view=/admin/"+key+"List.jsp";
 	}
+	@RequestMapping("courseForm.fm")
+	public String courseForm(Model model)
+	{
+		model.addAttribute("list", cGDao.loadAll());
+		return "/admin/courseForm.jsp";
+	}
 }

@@ -8,11 +8,11 @@
 <title></title>
 </head>
 <body>
-	<a href="/admin/courseForm.jsp" class="op">添加</a>
+	<a href="/courseForm.fm" class="op">添加</a>
 	<a class="op" onclick="del.submit()">删除选中条目</a>
 
     <br><br>
-	<form action="/course/delete" method="post" class="asyn-form" id="del">
+	<form action="/course/delete" method="post"  id="del">
 	<table>
 		<tr><th>ID</th><th>名称</th><th>课程组</th><th>学分</th><th>负责人</th><th></th><th></th></tr>
 		<c:forEach  var="ele" items="${pb.data }">
